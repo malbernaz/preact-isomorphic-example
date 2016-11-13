@@ -1,8 +1,7 @@
 {
-  "name": "preact-app-shell",
+  "name": "isomorphic-preact",
   "version": "1.0.0",
-  "description": "app shell architecture with preact",
-  "main": "index.js",
+  "description": "isomorphic architecture preact example",
   "author": "malbernaz <albernazmiguel@gmail.com>",
   "license": "MIT",
   "scripts": {
