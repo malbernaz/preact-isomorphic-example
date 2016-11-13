@@ -24,6 +24,7 @@ export default env => {
         loader: 'babel-loader'
       }]
     },
+    bail: PROD,
     devtool: PROD ? 'source-map' : 'cheap-module-eval-source-map',
   }
 
@@ -59,8 +60,8 @@ export default env => {
       ...baseConfig.output,
       publicPath: '/',
     },
-    devServer: PROD ? {} : {
-      port: process.env.PORT || 3001,
+    devServer: {
+      port: 3001,
       host: '0.0.0.0',
       colors: true,
       publicPath: '/',
