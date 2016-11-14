@@ -1,6 +1,6 @@
 import { h } from 'preact'
 
-export default ({ children }) =>
+export default ({ component, css }) =>
   <html lang="en">
     <head>
       <title>preact isomorphic example</title>
@@ -8,10 +8,11 @@ export default ({ children }) =>
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
       />
+      <style>{ css.join('') }</style>
     </head>
     <body>
       <div id="root">
-        { children }
+        { component }
       </div>
       <script src="bundle.js" />
     </body>

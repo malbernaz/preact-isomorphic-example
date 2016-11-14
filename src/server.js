@@ -7,6 +7,8 @@ import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
+import { StyleProvider } from './helpers/StyleProvider'
+
 import Html from './components/Html'
 import Root from './containers/Root'
 
@@ -16,16 +18,20 @@ const port = 3000
 app.use(serveStatic(resolve(__dirname, 'public')))
 app.use(serveFavicon(resolve(__dirname, 'public/favicon.ico')))
 
-app.use((req, res) => {
+app.get('*', (req, res) => {
   const history = createMemoryHistory({
     initialEntries: [req.url]
   })
 
-  res.send(`<!DOCTYPE html>${render(
-    <Html>
+  const css = []
+
+  const component = (
+    <StyleProvider onInsertCss={ s => css.push(s._getCss()) }>
       <Root history={ history } />
-    </Html>
-  )}`)
+    </StyleProvider>
+  )
+
+  res.send(`<!DOCTYPE html>${render(<Html css={ css } component={ component } />)}`)
 })
 
 createServer(app).listen(port, err => console.log( // eslint-disable-line no-console

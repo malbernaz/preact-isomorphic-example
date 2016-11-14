@@ -1,9 +1,8 @@
 {
-  "presets": [
-    "es2015-minimal",
-    "stage-0"
-  ],
+  "presets": ["es2015"],
   "plugins": [
+    "transform-object-rest-spread",
+    "transform-class-properties",
     "transform-decorators-legacy",
     ["transform-react-jsx", { "pragma": "h" }]
   ]
