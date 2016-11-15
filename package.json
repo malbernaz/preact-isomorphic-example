@@ -5,17 +5,24 @@
   "author": "malbernaz <albernazmiguel@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn run build:server && concurrently --raw --kill-others 'yarn run watch:server' 'yarn run serve:dev' 'yarn run watch:client'",
-    "serve:dev": "nodemon --watch dist --exec 'node --inspect' dist",
+    "build:dev:client": "webpack --env dev:client",
+    "build:dev:server": "webpack --env dev:server",
+    "build:prod:client": "webpack --env prod:client",
+    "build:prod:server": "webpack --env prod:server",
+    "build:dev": "yarn run build:dev:client && yarn run build:dev:server",
+    "build:prod": "yarn run build:prod:client && yarn run build:prod:server",
+    "nodemon": "nodemon --watch dist --exec 'node --inspect' dist",
+    "start": "yarn run build:dev && concurrently --raw --kill-others 'yarn run watch:server' 'yarn run nodemon' 'yarn run watch:client'",
     "watch:client": "webpack-dev-server --env dev:client --inline --hot --progress",
-    "watch:server": "webpack --env dev:server --watch",
-    "build:server": "webpack --env dev:server"
+    "watch:server": "webpack --env dev:server --watch"
   },
   "devDependencies": {
+    "assets-webpack-plugin": "^3.5.0",
     "autoprefixer": "^6.5.3",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.0",
     "babel-loader": "^6.2.7",
+    "babel-plugin-async-to-promises": "^1.0.5",
     "babel-plugin-transform-class-properties": "^6.18.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
@@ -42,8 +49,8 @@
     "history": "^4.4.0",
     "preact": "^6.4.0",
     "preact-render-to-string": "^3.2.1",
-    "preact-router": "^2.3.1",
     "serve-favicon": "^2.3.0",
-    "serve-static": "^1.11.1"
+    "serve-static": "^1.11.1",
+    "universal-router": "^2.0.0"
   }
 }

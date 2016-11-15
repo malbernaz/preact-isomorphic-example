@@ -1,37 +1,46 @@
-import { createMemoryHistory } from 'history'
 import { createServer } from 'http'
 import { h } from 'preact'
-import { resolve } from 'path'
+import { resolve } from 'universal-router/main.mjs'
 import express from 'express'
+import path from 'path'
 import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
-import { StyleProvider } from './helpers/StyleProvider'
-
+import assets from './assets'
 import Html from './components/Html'
-import Root from './containers/Root'
+import router from './routes'
 
 const app = express()
 const port = 3000
 
-app.use(serveStatic(resolve(__dirname, 'public')))
-app.use(serveFavicon(resolve(__dirname, 'public/favicon.ico')))
+app.use(serveStatic(path.resolve(__dirname, 'public')))
+app.use(serveFavicon(path.resolve(__dirname, 'public/favicon.ico')))
 
-app.get('*', (req, res) => {
-  const history = createMemoryHistory({
-    initialEntries: [req.url]
-  })
+app.get('*', async (req, res, next) => {
+  try {
+    const css = []
 
-  const css = []
+    const context = {
+      insertCss: (...styles) => {
+        styles.forEach(style => css.push(style._getCss()))
+      }
+    }
 
-  const component = (
-    <StyleProvider onInsertCss={ s => css.push(s._getCss()) }>
-      <Root history={ history } />
-    </StyleProvider>
-  )
+    const route = await resolve(router, { path: req.url, context })
 
-  res.send(`<!DOCTYPE html>${render(<Html css={ css } component={ component } />)}`)
+    const data = { ...route, css }
+
+    data.script = assets.main.js
+    data.chunk = assets[route.chunk] && assets[route.chunk].js
+
+    // First render to invoke context change
+    render(<Html { ...data } />)
+
+    res.send(`<!DOCTYPE html>${render(<Html { ...data } />)}`)
+  } catch (e) {
+    next(e)
+  }
 })
 
 createServer(app).listen(port, err => console.log( // eslint-disable-line no-console
