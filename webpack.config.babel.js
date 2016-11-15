@@ -129,9 +129,8 @@ export default env => {
     devServer: {
       port: 3001,
       host: '0.0.0.0',
-      colors: true,
       publicPath: '/',
-      clientLogLevel: 'none',
+      clientLogLevel: 'error',
       proxy: {
         '*': {
           target: 'http://0.0.0.0:3000'

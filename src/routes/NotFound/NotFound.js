@@ -1,3 +1,9 @@
 import { h } from 'preact'
 
-export default () => <h1>not found</h1>
+import { withStyles } from '../../helpers/styles'
+
+import s from './NotFound.css'
+
+const NotFound = () => <h1 class={ s.root }>not found</h1>
+
+export default withStyles(s)(NotFound)

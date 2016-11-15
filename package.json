@@ -41,8 +41,8 @@
     "isomorphic-style-loader": "^1.1.0",
     "nodemon": "^1.11.0",
     "postcss-loader": "^1.1.1",
-    "webpack": "2.1.0-beta.25",
-    "webpack-dev-server": "2.1.0-beta.10"
+    "webpack": "2.1.0-beta.27",
+    "webpack-dev-server": "2.1.0-beta.11"
   },
   "dependencies": {
     "express": "^4.14.0",
