@@ -1,9 +1,9 @@
 import { h, render } from 'preact'
 import { resolve } from 'universal-router/browser.mjs'
 
-import { StyleProvider } from './helpers/styles'
-import { updateTitle } from './helpers/updateTag'
-import history from './helpers/history'
+import { StyleProvider } from './lib/styles'
+import { updateTitle } from './lib/updateTag'
+import history from './lib/history'
 import config from './config'
 
 const scrollPositionsHistory = {}

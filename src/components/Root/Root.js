@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import Nav from '../Nav'
 
-import { withStyles } from '../../helpers/styles'
+import { withStyles } from '../../lib/styles'
 
 import s from './Root.css'
 

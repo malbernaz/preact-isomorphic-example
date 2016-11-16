@@ -1,6 +1,6 @@
 import { h } from 'preact'
 
-import { withStyles } from '../../helpers/styles'
+import { withStyles } from '../../lib/styles'
 
 import s from './About.css'
 

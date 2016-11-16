@@ -7,7 +7,7 @@ import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
-import { StyleProvider } from './helpers/styles'
+import { StyleProvider } from './lib/styles'
 import assets from './assets'
 import Html from './components/Html'
 import router from './routes'
