@@ -17,7 +17,7 @@ export function withStyles (...styles) {
     const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
 
     return class extends Component {
-      static displayName = `WithStyles(${displayName})`
+      static displayName = `WithStyles(${ displayName })`
 
       componentWillMount () {
         this.removeCss = this.context.insertCss.apply(undefined, styles)

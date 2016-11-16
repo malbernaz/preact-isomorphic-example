@@ -1,25 +1,27 @@
-import { h, Component } from 'preact'
+import { h } from 'preact'
 
-export default class Html extends Component { // eslint-disable-line
-  render ({ component, script, chunk, title, css }) {
-    return (
-      <html lang="en">
-        <head>
-          <title>preact isomorphic example | { title }</title>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-          />
-          { css && <style id="css" dangerouslySetInnerHTML={{ __html: [...css].join() }} /> }
-        </head>
-        <body>
-          <div id="root">
-            { component }
-          </div>
-          <script src={ script } />
-          { chunk && <script rel="preload" src={ chunk } /> }
-        </body>
-      </html>
-    )
-  }
-}
+import config from '../../config'
+
+export default ({ component, chunk, script, style, title }) => (
+  <html lang="en">
+    <head>
+      <meta charSet="utf-8" />
+
+      <title>{ config.head.title }{ title && ` | ${ title }` }</title>
+
+      <meta name="description" content={ config.head.description } />
+
+      { config.head.meta.map(m =>
+        <meta name={ m.name } content={ m.content } />
+      ) }
+
+      <style id="css">{ style }</style>
+    </head>
+    <body>
+      <div id="root" dangerouslySetInnerHTML={{ __html: component }} />
+
+      <script src={ script } />
+      <script src={ chunk } />
+    </body>
+  </html>
+)

@@ -1,17 +1,10 @@
-import { render } from 'preact'
+import { h, render } from 'preact'
 import { resolve } from 'universal-router/browser.mjs'
 
+import { StyleProvider } from './helpers/styles'
+import { updateTitle } from './helpers/updateTag'
 import history from './helpers/history'
-
-const context = {
-  insertCss: (...styles) => {
-    const removeCss = styles.map(x => x._insertCss())
-
-    return () => { removeCss.forEach(f => f()) }
-  }
-}
-
-const mountPoint = document.getElementById('root')
+import config from './config'
 
 const scrollPositionsHistory = {}
 
@@ -19,7 +12,18 @@ if (window.history && 'scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual'
 }
 
-function onRenderComplete (location) {
+let firstRender = true
+function onRenderComplete (route, location) {
+  if (firstRender) {
+    const elem = document.getElementById('css')
+
+    elem.parentNode.removeChild(elem)
+
+    firstRender = false
+  }
+
+  updateTitle(config.head.title, route.title)
+
   let scrollX = 0
   let scrollY = 0
   const pos = scrollPositionsHistory[location.key]
@@ -38,12 +42,21 @@ function onRenderComplete (location) {
 
   window.scrollTo(scrollX, scrollY)
 
-  return mountPoint.lastElementChild
+  return root
+}
+
+const context = {
+  insertCss: (...styles) => {
+    const removeCss = styles.map(x => x._insertCss())
+
+    return () => { removeCss.forEach(f => f()) }
+  }
 }
 
 let currentLocation = history.location
+const mountPoint = document.getElementById('root')
 
-async function onLocationChange (location) {
+async function boot (location) {
   scrollPositionsHistory[currentLocation.key] = {
     scrollX: window.pageXOffset,
     scrollY: window.pageYOffset
@@ -57,15 +70,21 @@ async function onLocationChange (location) {
 
   const router = require('./routes').default // eslint-disable-line global-require
 
-  const route = await resolve(router, { path: location.pathname, context })
+  const route = await resolve(router, { path: location.pathname })
 
-  const { component } = route
+  const component = (
+    <StyleProvider context={ context }>
+      { route.component }
+    </StyleProvider>
+  )
 
-  render(component, mountPoint, onRenderComplete(location))
+  render(component, mountPoint, mountPoint.lastElementChild)
+
+  onRenderComplete(route, location)
 }
 
-history.listen(onLocationChange)
+history.listen(boot)
 
-onLocationChange(currentLocation)
+boot(currentLocation)
 
-if (module.hot) module.hot.accept('./routes', () => onLocationChange(currentLocation))
+if (module.hot) module.hot.accept('./routes', () => boot(currentLocation))

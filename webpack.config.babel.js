@@ -1,9 +1,12 @@
+/* eslint-disable global-require */
+
 import { resolve } from 'path'
 import { readdirSync } from 'fs'
 import { LoaderOptionsPlugin, DefinePlugin, NamedModulesPlugin } from 'webpack'
+
 import CopyPlugin from 'copy-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
-import autoprefixer from 'autoprefixer'
+import StylelintPlugin from 'stylelint-webpack-plugin'
 
 export default env => {
   const CLIENT = /client/.test(env)
@@ -41,6 +44,9 @@ export default env => {
         exclude: /node_modules/,
         loaders: [babelLoader]
       }, {
+        test: /\.json$/,
+        loader: 'json-loader'
+      }, {
         test: /\.css$/,
         loaders: [
           'isomorphic-style-loader', {
@@ -54,6 +60,23 @@ export default env => {
           'postcss-loader'
         ],
         exclude: /node_modules/
+      }, {
+        test: /\.(gif|png|jpe?g|svg|woff|woff2)$/,
+        loaders: [{
+          loader: 'url-loader',
+          options: { limit: 10000 }
+        }, {
+          loader: 'image-webpack',
+          options: {
+            progressive: true,
+            optimizationLevel: 7,
+            interlaced: false,
+            pngquant: {
+              quality: '65-90',
+              speed: 4
+            }
+          }
+        }]
       }]
     },
     bail: !DEV,
@@ -63,9 +86,15 @@ export default env => {
         minimize: !DEV,
         debug: DEV,
         options: {
-          postcss: () => [
-            autoprefixer({ browsers: ['last 2 versions'] })
-          ]
+          postcss (compiler) {
+            return [
+              require('postcss-import')({ addDependencyTo: compiler }),
+              require('postcss-css-variables')(),
+              require('rucksack-css')(),
+              require('autoprefixer')({ browsers: ['last 2 versions'] }),
+              require('cssnano')({ zindex: false })
+            ]
+          }
         }
       }),
       new DefinePlugin({
@@ -84,7 +113,7 @@ export default env => {
     readdirSync('node_modules')
       .filter(x => ['.bin'].indexOf(x) === -1)
       .forEach(mod => {
-        nodeModules[mod] = `commonjs ${mod}`
+        nodeModules[mod] = `commonjs ${ mod }`
       })
 
     return {
@@ -119,10 +148,15 @@ export default env => {
     },
     plugins: [
       ...baseConfig.plugins,
+      new StylelintPlugin({
+        configFile: '.stylelintrc.json',
+        files: ['**/*.css'],
+        failOnError: !DEV
+      }),
       new AssetsPlugin({
-        path: resolve(__dirname, 'src'),
+        path: resolve(__dirname, 'dist'),
         filename: 'assets.js',
-        processOutput: x => `module.exports = ${JSON.stringify(x)}`
+        processOutput: x => `module.exports = ${ JSON.stringify(x) }`
       }),
       DEV && new NamedModulesPlugin()
     ],

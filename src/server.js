@@ -7,6 +7,7 @@ import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
+import { StyleProvider } from './helpers/styles'
 import assets from './assets'
 import Html from './components/Html'
 import router from './routes'
@@ -21,28 +22,30 @@ app.get('*', async (req, res, next) => {
   try {
     const css = []
 
-    const context = {
-      insertCss: (...styles) => {
-        styles.forEach(style => css.push(style._getCss()))
-      }
+    const context = { insertCss: (...s) => s.forEach(style => css.push(style._getCss())) }
+
+    const route = await resolve(router, { path: req.url })
+
+    const component = render(
+      <StyleProvider context={ context }>
+        { route.component }
+      </StyleProvider>
+    )
+
+    const data = {
+      component,
+      chunk: assets[route.chunk].js,
+      script: assets.main.js,
+      style: [...css].join(''),
+      title: route.title
     }
 
-    const route = await resolve(router, { path: req.url, context })
-
-    const data = { ...route, css }
-
-    data.script = assets.main.js
-    data.chunk = assets[route.chunk] && assets[route.chunk].js
-
-    // First render to invoke context change
-    render(<Html { ...data } />)
-
-    res.send(`<!DOCTYPE html>${render(<Html { ...data } />)}`)
+    res.send(`<!DOCTYPE html>${ render(<Html { ...data } />) }`)
   } catch (e) {
     next(e)
   }
 })
 
 createServer(app).listen(port, err => console.log( // eslint-disable-line no-console
-  err || `\n==> server running on port ${port}\n`
+  err || `\n==> server running on port ${ port }\n`
 ))

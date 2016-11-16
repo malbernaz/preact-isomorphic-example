@@ -6,19 +6,13 @@ import About from './About'
 import Contact from './Contact'
 import NotFound from './NotFound'
 
-import { StyleProvider } from '../helpers/styles'
-
 export default {
   path: '/',
 
-  async action ({ next, context }) {
+  async action ({ next }) {
     const route = await next()
 
-    const component = (
-      <StyleProvider context={ context } key="style-provider">
-        <Root>{ route.component }</Root>
-      </StyleProvider>
-    )
+    const component = <Root>{ route.component }</Root>
 
     return { ...route, component }
   },

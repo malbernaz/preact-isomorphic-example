@@ -1,15 +1,15 @@
-import { h, Component } from 'preact'
+import { h } from 'preact'
 import Nav from '../Nav'
 
-class Root extends Component { // eslint-disable-line
-  render ({ children }) {
-    return (
-      <div>
-        <Nav />
-        <div>{ children }</div>
-      </div>
-    )
-  }
-}
+import { withStyles } from '../../helpers/styles'
 
-export default Root
+import s from './Root.css'
+
+const Root = ({ children }) => (
+  <div>
+    <Nav />
+    <div>{ children }</div>
+  </div>
+)
+
+export default withStyles(s)(Root)
