@@ -18,11 +18,7 @@ const preMiddleware = _CLIENT_ ? function clientPreMiddleware ({ history }) {
   useScroll.storeScroll(history)
 } : f => f
 
-const postMiddleware = _CLIENT_ ? function clientPostMiddleware ({ history, route }) {
-  const { updateTitle } = require('../lib/updateTag')
-
-  updateTitle(route.title)
-
+const postMiddleware = _CLIENT_ ? function clientPostMiddleware ({ history }) {
   useScroll.restoreScroll(history.location)
 } : f => f
 
@@ -34,7 +30,7 @@ export default {
 
     const route = await next()
 
-    postMiddleware({ history, route })
+    postMiddleware({ history })
 
     const component = <Root>{ route.component }</Root>
 

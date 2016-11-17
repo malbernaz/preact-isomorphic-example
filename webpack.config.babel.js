@@ -98,11 +98,9 @@ export default env => {
         }
       }),
       new DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify(!DEV ? 'production' : 'development')
-        },
         _DEV_: DEV,
-        _CLIENT_: CLIENT
+        _CLIENT_: CLIENT,
+        'process.env.NODE_ENV': JSON.stringify(!DEV ? 'production' : 'development')
       })
     ]
   }
@@ -157,9 +155,10 @@ export default env => {
         path: resolve(__dirname, 'dist'),
         filename: 'assets.js',
         processOutput: x => `module.exports = ${ JSON.stringify(x) }`
-      }),
-      DEV && new NamedModulesPlugin()
-    ],
+      })
+    ].concat(DEV ? [
+      new NamedModulesPlugin()
+    ] : []),
     devServer: {
       port: 3001,
       host: '0.0.0.0',

@@ -2,6 +2,7 @@ import { h, render } from 'preact'
 import { resolve } from 'universal-router/browser.mjs'
 
 import { StyleProvider } from './lib/styles'
+import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
 
 let CURRENT_LOCATION = history.location
@@ -39,6 +40,8 @@ async function bootstrap (location = CURRENT_LOCATION) {
   )
 
   render(component, mountPoint, mountPoint.lastElementChild)
+
+  updateTitle(route.title)
 }
 
 history.listen(bootstrap)
