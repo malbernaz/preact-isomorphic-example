@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 import { resolve } from 'path'
 import { readdirSync } from 'fs'
 import { LoaderOptionsPlugin, DefinePlugin, NamedModulesPlugin } from 'webpack'

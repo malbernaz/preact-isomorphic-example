@@ -41,6 +41,6 @@ export default class UseScroll {
       }
     }
 
-    window.scrollTo(scrollX, scrollY)
+    setTimeout(() => window.scrollTo(scrollX, scrollY), 0)
   }
 }
