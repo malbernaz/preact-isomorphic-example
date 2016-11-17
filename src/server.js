@@ -8,7 +8,7 @@ import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
 import { StyleProvider } from './lib/styles'
-import assets from './assets'
+import assets from './assets' // eslint-disable-line import/extensions
 import Html from './components/Html'
 import router from './routes'
 

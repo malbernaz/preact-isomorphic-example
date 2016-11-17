@@ -116,7 +116,10 @@ export default env => {
 
     return {
       ...baseConfig,
-      externals: nodeModules,
+      externals: {
+        ...nodeModules,
+        './assets': 'commonjs ./assets'
+      },
       target: 'node',
       output: {
         ...baseConfig.output,

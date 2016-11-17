@@ -18,7 +18,7 @@ const context = {
 
 const mountPoint = document.getElementById('root')
 
-async function bootstrap (location = CURRENT_LOCATION) {
+async function bootstrap (location) {
   if (FIRST_RENDER) {
     const node = document.getElementById('css')
 
@@ -46,6 +46,6 @@ async function bootstrap (location = CURRENT_LOCATION) {
 
 history.listen(bootstrap)
 
-bootstrap()
+bootstrap(CURRENT_LOCATION)
 
-if (module.hot) module.hot.accept('./routes', bootstrap)
+if (module.hot) module.hot.accept('./routes', () => bootstrap(CURRENT_LOCATION))

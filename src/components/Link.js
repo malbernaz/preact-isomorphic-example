@@ -5,6 +5,8 @@ class Link extends Component {
   handleClick = e => {
     if (this.props.onClick) this.props.onClick(e)
 
+    if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) return
+
     if (e.button !== 0) return
 
     if (e.defaultPrevented === true) return
