@@ -6,11 +6,35 @@ import About from './About'
 import Contact from './Contact'
 import NotFound from './NotFound'
 
+let useScroll
+
+const preMiddleware = _CLIENT_ ? function clientPreMiddleware ({ history }) {
+  if (!useScroll) {
+    const UseScroll = require('../lib/middleware/useScroll').default
+
+    useScroll = new UseScroll(history.location)
+  }
+
+  useScroll.storeScroll(history)
+} : f => f
+
+const postMiddleware = _CLIENT_ ? function clientPostMiddleware ({ history, route }) {
+  const { updateTitle } = require('../lib/updateTag')
+
+  updateTitle(route.title)
+
+  useScroll.restoreScroll(history.location)
+} : f => f
+
 export default {
   path: '/',
 
-  async action ({ next }) {
+  async action ({ next, history }) {
+    preMiddleware({ history })
+
     const route = await next()
+
+    postMiddleware({ history, route })
 
     const component = <Root>{ route.component }</Root>
 

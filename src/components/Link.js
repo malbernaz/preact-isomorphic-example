@@ -1,5 +1,5 @@
 import { h, Component } from 'preact'
-import history from '../../lib/history'
+import history from '../lib/history'
 
 class Link extends Component {
   handleClick = e => {

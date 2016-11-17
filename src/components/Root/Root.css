@@ -1,1 +1,6 @@
 @import 'normalize.css';
+
+.root {
+  text-align: center;
+  margin: 60px auto 0;
+}

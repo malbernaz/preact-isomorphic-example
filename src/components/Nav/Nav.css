@@ -1,3 +1,17 @@
 .root {
   position: fixed 0 auto auto 0;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background: #fefefe;
+  z-index: 1;
+}
+
+.link {
+  height: 60px;
+  line-height: 60px;
+  padding: 20px;
+  display: block;
 }

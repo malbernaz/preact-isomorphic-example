@@ -9,6 +9,7 @@
     "arrow-parens": ["error", "as-needed"],
     "comma-dangle": ["error", "never"],
     "func-names": ["error", "always"],
+    "global-require": 0,
     "import/no-extraneous-dependencies": ["error", {
       "devDependencies": true,
       "optionalDependencies": false,

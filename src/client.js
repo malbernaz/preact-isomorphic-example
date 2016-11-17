@@ -2,15 +2,10 @@ import { h, render } from 'preact'
 import { resolve } from 'universal-router/browser.mjs'
 
 import { StyleProvider } from './lib/styles'
-import { updateTitle } from './lib/updateTag'
-import UseScroll from './lib/middleware/useScroll'
-import config from './config'
+import history from './lib/history'
 
+let CURRENT_LOCATION = history.location
 let FIRST_RENDER = true
-let USE_SCROLL = true
-
-const scroll = new UseScroll()
-const history = scroll.history
 
 const context = {
   insertCss (...styles) {
@@ -22,28 +17,20 @@ const context = {
 
 const mountPoint = document.getElementById('root')
 
-async function boot (location) {
+async function bootstrap (location = CURRENT_LOCATION) {
   if (FIRST_RENDER) {
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual'
-    } else {
-      USE_SCROLL = false
-    }
+    const node = document.getElementById('css')
 
-    const elem = document.getElementById('css')
-
-    elem.parentNode.removeChild(elem)
+    if (node) node.parentNode.removeChild(node)
 
     FIRST_RENDER = false
   }
 
-  if (USE_SCROLL) {
-    scroll.storeScroll(location)
-  }
+  CURRENT_LOCATION = location
 
   const router = require('./routes').default // eslint-disable-line global-require
 
-  const route = await resolve(router, { path: location.pathname })
+  const route = await resolve(router, { path: location.pathname, history })
 
   const component = (
     <StyleProvider context={ context }>
@@ -52,16 +39,10 @@ async function boot (location) {
   )
 
   render(component, mountPoint, mountPoint.lastElementChild)
-
-  updateTitle(config.head.title, route.title)
-
-  if (USE_SCROLL) {
-    scroll.restoreScroll(location)
-  }
 }
 
-history.listen(boot)
+history.listen(bootstrap)
 
-boot(scroll.currentLocation)
+bootstrap()
 
-if (module.hot) module.hot.accept('./routes', () => boot(scroll.currentLocation))
+if (module.hot) module.hot.accept('./routes', bootstrap)

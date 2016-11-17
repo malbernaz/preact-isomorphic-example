@@ -6,9 +6,9 @@ import { withStyles } from '../../lib/styles'
 import s from './Root.css'
 
 const Root = ({ children }) => (
-  <div>
+  <div class={ s.root }>
     <Nav />
-    <div>{ children }</div>
+    { children }
   </div>
 )
 

@@ -1,20 +1,22 @@
-import history from '../history'
+export default class UseScroll {
+  constructor (location) {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
 
-export default class ScrollMiddleware {
-  constructor () {
+    this.currentLocation = location
     this.scrollPositionsHistory = {}
-    this.history = history
-    this.currentLocation = history.location
-    this.firstRender = true
   }
 
-  storeScroll (location) {
+  storeScroll (history) {
+    const { location } = history
+
     this.scrollPositionsHistory[this.currentLocation.key] = {
       scrollX: window.pageXOffset,
       scrollY: window.pageYOffset
     }
 
-    if (this.history.action === 'PUSH') {
+    if (history.action === 'PUSH') {
       delete this.scrollPositionsHistory[location.key]
     }
 

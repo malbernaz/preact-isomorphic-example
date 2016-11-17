@@ -1,6 +1,6 @@
 import { h } from 'preact'
 
-import config from '../../config'
+import config from '../config'
 
 export default ({ component, chunk, script, style, title }) => (
   <html lang="en">

@@ -1,3 +1,5 @@
+import config from '../config'
+
 export function updateTag (tagName, keyName, keyValue, attrName, attrValue) {
   const node = document.head.querySelector(`${ tagName }[${ keyName }="${ keyValue }"]`)
 
@@ -17,12 +19,10 @@ export function updateTag (tagName, keyName, keyValue, attrName, attrValue) {
   }
 }
 
-export function updateTitle (titleTemplate, title) {
-  const node = document.head.querySelector('title')
+export function updateTitle (title) {
+  if (new RegExp(title).test(document.title)) return
 
-  if (node && node.innerText === `${ titleTemplate } | ${ title }`) return
-
-  node.innerText = `${ titleTemplate } | ${ title }`
+  document.title = `${ config.head.title } | ${ title }`
 }
 
 export function updateMeta (name, content) {
