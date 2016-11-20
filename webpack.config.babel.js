@@ -1,10 +1,15 @@
 import { resolve } from 'path'
 import { readdirSync } from 'fs'
-import { LoaderOptionsPlugin, DefinePlugin, NamedModulesPlugin } from 'webpack'
+import {
+  DefinePlugin,
+  HotModuleReplacementPlugin,
+  LoaderOptionsPlugin,
+  NamedModulesPlugin
+} from 'webpack'
 
 import CopyPlugin from 'copy-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
-import StylelintPlugin from 'stylelint-webpack-plugin'
+import StyleLintPlugin from 'stylelint-webpack-plugin'
 
 export default env => {
   const CLIENT = /client/.test(env)
@@ -45,7 +50,7 @@ export default env => {
         test: /\.json$/,
         loader: 'json-loader'
       }, {
-        test: /\.css$/,
+        test: /\.scss$/,
         loaders: [
           'isomorphic-style-loader', {
             loader: 'css-loader',
@@ -55,7 +60,8 @@ export default env => {
                 '[name]__[local]-[hash:base64:5]' : '[hash:base64:5]'
             }
           },
-          'postcss-loader'
+          'postcss-loader',
+          'sass-loader'
         ],
         exclude: /node_modules/
       }, {
@@ -84,40 +90,55 @@ export default env => {
         minimize: !DEV,
         debug: DEV,
         options: {
-          postcss (compiler) {
-            return [
-              require('postcss-import')({ addDependencyTo: compiler }),
-              require('postcss-css-variables')(),
-              require('rucksack-css')(),
-              require('autoprefixer')({ browsers: ['last 2 versions'] }),
-              require('cssnano')({ zindex: false })
-            ]
-          }
+          postcss: () => [
+            require('autoprefixer')({ browsers: ['last 2 versions'] }),
+            require('cssnano')({ zindex: false })
+          ]
         }
+      }),
+      new StyleLintPlugin({
+        configFile: '.stylelintrc.json',
+        files: '**/*.s?(c)ss',
+        failOnError: !DEV
       }),
       new DefinePlugin({
         _DEV_: DEV,
         _CLIENT_: CLIENT,
-        'process.env.NODE_ENV': JSON.stringify(!DEV ? 'production' : 'development')
+        'process.env.NODE_ENV': JSON.stringify(DEV ? 'development' : 'production')
       })
-    ]
+    ],
+    stats: {
+      colors: true,
+      hash: false,
+      version: false,
+      timings: true,
+      assets: true,
+      chunks: false,
+      modules: false,
+      reasons: false,
+      children: false,
+      source: false,
+      errors: false,
+      errorDetails: false,
+      warnings: false,
+      publicPath: false
+    }
   }
 
   if (!CLIENT) {
-    const nodeModules = {}
+    const externals = {
+      './assets': 'commonjs ./assets'
+    }
 
     readdirSync('node_modules')
       .filter(x => ['.bin'].indexOf(x) === -1)
       .forEach(mod => {
-        nodeModules[mod] = `commonjs ${ mod }`
+        externals[mod] = `commonjs ${ mod }`
       })
 
     return {
       ...baseConfig,
-      externals: {
-        ...nodeModules,
-        './assets': 'commonjs ./assets'
-      },
+      externals,
       target: 'node',
       output: {
         ...baseConfig.output,
@@ -147,17 +168,13 @@ export default env => {
     },
     plugins: [
       ...baseConfig.plugins,
-      new StylelintPlugin({
-        configFile: '.stylelintrc.json',
-        files: ['**/*.css'],
-        failOnError: !DEV
-      }),
       new AssetsPlugin({
         path: resolve(__dirname, 'dist'),
         filename: 'assets.js',
         processOutput: x => `module.exports = ${ JSON.stringify(x) }`
       })
     ].concat(DEV ? [
+      new HotModuleReplacementPlugin(),
       new NamedModulesPlugin()
     ] : []),
     devServer: {
@@ -165,6 +182,8 @@ export default env => {
       host: '0.0.0.0',
       publicPath: '/',
       clientLogLevel: 'error',
+      hot: true,
+      inline: true,
       proxy: {
         '*': {
           target: 'http://0.0.0.0:3000'

@@ -1,18 +1,6 @@
-/* eslint-disable react/no-multi-comp */
-
 import { h, Component } from 'preact'
 
-export class StyleProvider extends Component {
-  getChildContext () {
-    return this.props.context
-  }
-
-  render ({ children }) {
-    return children && children[0] || null // eslint-disable-line no-mixed-operators
-  }
-}
-
-export function withStyles (...styles) {
+export default function withStyles (...styles) {
   return function wrapWithStyles (WrappedComponent) {
     const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
 

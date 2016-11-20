@@ -1,9 +1,9 @@
 import { h } from 'preact'
 import Link from '../Link'
 
-import { withStyles } from '../../lib/styles'
+import withStyles from '../../lib/withStyles'
 
-import s from './Nav.css'
+import s from './Nav.scss'
 
 const Nav = () => (
   <header class={ s.root }>

@@ -7,9 +7,9 @@ import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 import serveStatic from 'serve-static'
 
-import { StyleProvider } from './lib/styles'
 import assets from './assets' // eslint-disable-line import/extensions
 import Html from './components/Html'
+import Provider from './lib/ContextProvider'
 import router from './routes'
 
 const app = express()
@@ -27,9 +27,9 @@ app.get('*', async (req, res, next) => {
     const route = await resolve(router, { path: req.url })
 
     const component = render(
-      <StyleProvider context={ context }>
+      <Provider context={ context }>
         { route.component }
-      </StyleProvider>
+      </Provider>
     )
 
     const data = {
