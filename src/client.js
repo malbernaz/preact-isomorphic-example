@@ -30,8 +30,7 @@ const context = {
   }
 }
 
-const mountPoint = document.getElementById('root')
-
+const mnt = document.querySelector('main')
 async function bootstrap (location) {
   if (FIRST_RENDER) {
     const node = document.getElementById('css')
@@ -53,7 +52,7 @@ async function bootstrap (location) {
     </Provider>
   )
 
-  render(component, mountPoint, mountPoint.lastElementChild)
+  render(component, mnt, mnt.lastElementChild)
 }
 
 history.listen(bootstrap)

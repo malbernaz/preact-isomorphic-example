@@ -18,7 +18,7 @@ export default ({ component, chunk, script, style, title }) => (
       <style id="css">{ style }</style>
     </head>
     <body>
-      <div id="root" dangerouslySetInnerHTML={{ __html: component }} />
+      <main dangerouslySetInnerHTML={{ __html: component }} />
 
       <script src={ script } />
       <script src={ chunk } />
