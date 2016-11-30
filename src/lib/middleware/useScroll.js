@@ -24,17 +24,20 @@ export default class UseScroll {
   }
 
   restoreScroll (location) {
+    const pos = this.scrollPositionsHistory[location.key]
+
     let scrollX = 0
     let scrollY = 0
-    const pos = this.scrollPositionsHistory[location.key]
 
     if (pos) {
       scrollX = pos.scrollX
       scrollY = pos.scrollY
     } else {
       const targetHash = location.hash.substr(1)
+
       if (targetHash) {
         const target = document.getElementById(targetHash)
+
         if (target) {
           scrollY = window.pageYOffset + target.getBoundingClientRect().top
         }
