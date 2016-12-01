@@ -1,9 +1,9 @@
 import { h, render } from 'preact'
 import { resolve } from 'universal-router/browser.mjs'
 
-import Provider from './lib/ContextProvider'
 import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
+import Provider from './lib/ContextProvider'
 import UseScroll from './lib/middleware/useScroll'
 
 let CURRENT_LOCATION = history.location
@@ -11,7 +11,7 @@ let FIRST_RENDER = true
 
 const scroll = new UseScroll(CURRENT_LOCATION)
 
-const middleware = {
+const routerMiddleware = {
   preMiddleware () {
     scroll.storeScroll(history)
   },
@@ -31,6 +31,7 @@ const context = {
 }
 
 const mnt = document.querySelector('main')
+
 async function bootstrap (location) {
   if (FIRST_RENDER) {
     const node = document.getElementById('css')
@@ -44,7 +45,7 @@ async function bootstrap (location) {
 
   const router = require('./routes').default // eslint-disable-line global-require
 
-  const route = await resolve(router, { path: location.pathname, ...middleware })
+  const route = await resolve(router, { path: location.pathname, ...routerMiddleware })
 
   const component = (
     <Provider context={ context }>

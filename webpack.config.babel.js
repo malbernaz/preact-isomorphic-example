@@ -45,13 +45,13 @@ export default env => {
       }, {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: [babelLoader]
+        use: [babelLoader]
       }, {
         test: /\.json$/,
         loader: 'json-loader'
       }, {
         test: /\.scss$/,
-        loaders: [
+        use: [
           'isomorphic-style-loader', {
             loader: 'css-loader',
             options: {
@@ -66,7 +66,7 @@ export default env => {
         exclude: /node_modules/
       }, {
         test: /\.(gif|png|jpe?g|svg|woff|woff2)$/,
-        loaders: [{
+        use: [{
           loader: 'url-loader',
           options: { limit: 10000 }
         }, {

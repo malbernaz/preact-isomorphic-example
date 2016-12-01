@@ -36,7 +36,7 @@ app.get('*', async (req, res, next) => {
       component,
       chunk: assets[route.chunk].js,
       script: assets.main.js,
-      style: [...css].join(''),
+      style: css.join(''),
       title: route.title
     }
 

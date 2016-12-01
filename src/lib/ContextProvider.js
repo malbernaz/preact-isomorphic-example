@@ -4,6 +4,7 @@ export default class ContextProvider {
   }
 
   render ({ children }) {
-    return children && children[0] || null // eslint-disable-line no-mixed-operators
+    // eslint-disable-next-line no-mixed-operators
+    return children && children[0] || null
   }
 }
