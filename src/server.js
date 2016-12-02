@@ -1,6 +1,7 @@
 import { createServer } from 'http'
 import { h } from 'preact'
-import { resolve } from 'universal-router/main.mjs'
+import { resolve } from 'universal-router' // eslint-disable-line import/extensions
+import compression from 'compression'
 import express from 'express'
 import path from 'path'
 import render from 'preact-render-to-string'
@@ -15,6 +16,7 @@ import router from './routes'
 const app = express()
 const port = 3000
 
+app.use(compression({ threshold: 0 }))
 app.use(serveStatic(path.resolve(__dirname, 'public')))
 app.use(serveFavicon(path.resolve(__dirname, 'public/favicon.ico')))
 
@@ -32,9 +34,21 @@ app.get('*', async (req, res, next) => {
       </Provider>
     )
 
+    const chunks = Object.keys(assets)
+      .filter(k =>
+        !!assets[k].js &&
+        !/main/.test(k) &&
+        !/commons/.test(k) &&
+        !/admin/.test(k) &&
+        !new RegExp(route.chunk).test(k)
+      )
+      .map(k => assets[k].js)
+
     const data = {
+      chunks,
+      commonjs: assets.commons.js,
       component,
-      chunk: assets[route.chunk].js,
+      routeChunk: assets[route.chunk].js,
       script: assets.main.js,
       style: css.join(''),
       title: route.title

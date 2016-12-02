@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import { readdirSync } from 'fs'
-import {
+import webpack, {
   DefinePlugin,
   HotModuleReplacementPlugin,
   LoaderOptionsPlugin,
@@ -10,6 +10,8 @@ import {
 import CopyPlugin from 'copy-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
+
+const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
 
 export default env => {
   const CLIENT = /client/.test(env)
@@ -33,9 +35,18 @@ export default env => {
 
   const baseConfig = {
     context: resolve(__dirname, 'src'),
-    entry: CLIENT ? './client.js' : './server.js',
+    entry: {
+      main: CLIENT ? './client.js' : './server.js'
+    },
     output: {
       path: resolve(__dirname, CLIENT ? 'dist/public' : 'dist')
+    },
+    resolve: {
+      alias: {
+        react: 'preact-compat',
+        'react-dom': 'preact-compat'
+      },
+      mainFields: ['jsnext:main', 'main']
     },
     module: {
       rules: [{
@@ -151,7 +162,8 @@ export default env => {
       plugins: [
         ...baseConfig.plugins,
         new CopyPlugin([{
-          from: 'static/favicon.ico',
+          context: resolve(__dirname),
+          from: './static/favicon.ico',
           to: 'public'
         }])
       ]
@@ -160,6 +172,21 @@ export default env => {
 
   return {
     ...baseConfig,
+    entry: {
+      ...baseConfig.entry,
+      commons: [
+        'preact',
+        'history/createBrowserHistory',
+        'universal-router'
+      ]
+    },
+    resolve: {
+      alias: {
+        preact: 'preact/dist/preact.min.js',
+        ...baseConfig.resolve.alias
+      },
+      mainFields: ['jsnext:browser', 'jsnext:main', 'browser', 'main']
+    },
     output: {
       ...baseConfig.output,
       filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
@@ -172,11 +199,31 @@ export default env => {
         path: resolve(__dirname, 'dist'),
         filename: 'assets.js',
         processOutput: x => `module.exports = ${ JSON.stringify(x) }`
+      }),
+      new CommonsChunkPlugin({
+        name: 'commons',
+        filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
+        minChunks: Infinity
       })
     ].concat(DEV ? [
       new HotModuleReplacementPlugin(),
       new NamedModulesPlugin()
-    ] : []),
+    ] : [
+      new UglifyJsPlugin({
+        compress: {
+          screw_ie8: true,
+          warnings: false
+        },
+        output: {
+          comments: false,
+          screw_ie8: true
+        },
+        mangle: {
+          screw_ie8: true
+        },
+        sourceMap: true
+      })
+    ]),
     devServer: {
       port: 3001,
       host: '0.0.0.0',

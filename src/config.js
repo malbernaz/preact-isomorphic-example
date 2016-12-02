@@ -2,6 +2,7 @@ const title = 'preact isomorphic example'
 const description = 'A very simple boilerplate for an isomorphic Preact application'
 
 export default {
+  lang: 'en',
   head: {
     title,
     description,

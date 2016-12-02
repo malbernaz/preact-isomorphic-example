@@ -2,8 +2,16 @@ import { h } from 'preact'
 
 import config from '../config'
 
-export default ({ component, chunk, script, style, title }) => (
-  <html lang="en">
+export default ({
+  chunks,
+  commonjs,
+  component,
+  routeChunk,
+  script,
+  style,
+  title
+}) => (
+  <html lang={ config.lang }>
     <head>
       <meta charSet="utf-8" />
 
@@ -20,8 +28,13 @@ export default ({ component, chunk, script, style, title }) => (
     <body>
       <main dangerouslySetInnerHTML={{ __html: component }} />
 
-      <script src={ script } />
-      <script src={ chunk } />
+      <script src={ commonjs } defer />
+      <script src={ script } defer />
+      <script src={ routeChunk } defer />
+
+      { chunks.map(c =>
+        <link as="script" href={ c } rel="preload" />
+      ) }
     </body>
   </html>
 )

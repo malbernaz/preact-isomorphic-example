@@ -1,5 +1,5 @@
 import { h, render } from 'preact'
-import { resolve } from 'universal-router/browser.mjs'
+import { resolve } from 'universal-router' // eslint-disable-line import/extensions
 
 import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
