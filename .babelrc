@@ -1,10 +1,6 @@
 {
   "presets": ["es2015"],
   "plugins": [
-    "async-to-promises",
-    "transform-class-properties",
-    "transform-decorators-legacy",
     "transform-object-rest-spread",
-    ["transform-react-jsx", { "pragma": "h" }]
   ]
 }
