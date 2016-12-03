@@ -1,7 +1,8 @@
 import { h } from 'preact'
-import Nav from '../Nav'
 
 import withStyles from '../../lib/withStyles'
+
+import Nav from '../Nav'
 
 import s from './Root.scss'
 
