@@ -28,9 +28,9 @@ export default ({ baseConfig }) => {
     plugins: [
       ...baseConfig.plugins,
       new CopyPlugin([{
-        context: resolve(__dirname),
-        from: './static/favicon.ico',
-        to: 'public'
+        context: resolve(__dirname, 'static'),
+        from: '**/*',
+        to: resolve(__dirname, 'dist', 'public')
       }])
     ]
   }

@@ -7,13 +7,13 @@
   "scripts": {
     "build:dev:client": "webpack --env dev:client",
     "build:dev:server": "webpack --env dev:server",
-    "build:dev": "yarn build:dev:client && yarn build:dev:server",
+    "build:dev": "yarn cleandist && yarn build:dev:client && yarn build:dev:server",
     "build:prod:client": "webpack --env prod:client",
     "build:prod:server": "webpack --env prod:server",
     "build:prod": "yarn cleandist && yarn build:prod:client && yarn build:prod:server",
     "cleandist": "rimraf dist",
     "dev": "yarn build:dev && concurrently --raw --kill-others 'yarn watch:server' 'yarn nodemon' 'yarn watch:client'",
-    "nodemon": "nodemon --watch dist --ignore dist/public --exec 'node --inspect' dist",
+    "nodemon": "nodemon --watch dist --ignore dist/public/ --delay 2 --exec 'node --inspect' dist",
     "start": "node dist",
     "watch:client": "webpack-dev-server --env dev:client",
     "watch:server": "webpack --env dev:server --watch"

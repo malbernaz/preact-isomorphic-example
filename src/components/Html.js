@@ -2,15 +2,7 @@ import { h } from 'preact'
 
 import config from '../config'
 
-export default ({
-  chunks,
-  commonjs,
-  component,
-  routeChunk,
-  script,
-  style,
-  title
-}) => (
+export default ({ chunks, commonjs, component, routeChunk, script, style, title }) => (
   <html lang={ config.lang }>
     <head>
       <meta charSet="utf-8" />
@@ -23,6 +15,20 @@ export default ({
         <meta name={ m.name } content={ m.content } />
       ) }
 
+      { config.head.customMeta.map(m =>
+        <meta property={ m.property } content={ m.content } />
+      ) }
+
+      { config.head.link.map(l =>
+        <link
+          color={ l.color }
+          href={ l.href }
+          rel={ l.rel }
+          sizes={ l.sizes }
+          type={ l.type }
+        />
+      ) }
+
       <style id="css">{ style }</style>
     </head>
     <body>
@@ -33,7 +39,7 @@ export default ({
       <script src={ routeChunk } defer />
 
       { chunks.map(c =>
-        <link as="script" href={ c } rel="preload" />
+        <link rel="preload" as="script" href={ c } />
       ) }
     </body>
   </html>
