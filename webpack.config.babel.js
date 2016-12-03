@@ -1,6 +1,5 @@
 import { resolve } from 'path'
 import { DefinePlugin, LoaderOptionsPlugin } from 'webpack'
-import StyleLintPlugin from 'stylelint-webpack-plugin'
 
 import clientConfig from './webpack.client.config'
 import serverConfig from './webpack.server.config'
@@ -98,11 +97,6 @@ export default env => {
             require('cssnano')({ zindex: false })
           ]
         }
-      }),
-      new StyleLintPlugin({
-        configFile: '.stylelintrc.json',
-        files: '**/*.s?(c)ss',
-        failOnError: !DEV
       }),
       new DefinePlugin({
         _DEV_: DEV,

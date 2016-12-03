@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import webpack, { HotModuleReplacementPlugin, NamedModulesPlugin } from 'webpack'
 import AssetsPlugin from 'assets-webpack-plugin'
+import StyleLintPlugin from 'stylelint-webpack-plugin'
 
 const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
 
@@ -36,8 +37,12 @@ export default ({ DEV, baseConfig }) => ({
     }),
     new CommonsChunkPlugin({
       name: 'commons',
-      filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
       minChunks: Infinity
+    }),
+    new StyleLintPlugin({
+      configFile: '.stylelintrc.json',
+      files: '**/*.s?(c)ss',
+      failOnError: !DEV
     })
   ].concat(DEV ? [
     new HotModuleReplacementPlugin(),
