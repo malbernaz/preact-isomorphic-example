@@ -14,7 +14,7 @@
     "cleandist": "rimraf dist",
     "dev": "yarn build:dev && concurrently --raw --kill-others 'yarn watch:server' 'yarn nodemon' 'yarn watch:client'",
     "nodemon": "nodemon --watch dist --ignore dist/public/ --delay 2 --exec 'node --inspect' dist",
-    "start": "node dist",
+    "start": "yarn build:prod && node dist",
     "watch:client": "webpack-dev-server --env dev:client",
     "watch:server": "webpack --env dev:server --watch"
   },
@@ -56,6 +56,7 @@
     "stylelint-config-css-modules": "^0.1.0",
     "stylelint-config-standard": "15.0.0",
     "stylelint-webpack-plugin": "^0.4.0",
+    "sw-precache-webpack-plugin": "^0.6.3",
     "url-loader": "^0.5.7",
     "webpack": "2.1.0-beta.27",
     "webpack-dev-server": "2.1.0-beta.11"

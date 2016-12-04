@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import webpack, { HotModuleReplacementPlugin, NamedModulesPlugin } from 'webpack'
 import AssetsPlugin from 'assets-webpack-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
+import SwPrecachePlugin from 'sw-precache-webpack-plugin'
 
 const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
 
@@ -43,6 +44,11 @@ export default ({ DEV, baseConfig }) => ({
       configFile: '.stylelintrc.json',
       files: '**/*.s?(c)ss',
       failOnError: !DEV
+    }),
+    new SwPrecachePlugin({
+      cacheId: 'sw-precache',
+      importScripts: ['/runtime-sw.js'],
+      verbose: DEV
     })
   ].concat(DEV ? [
     new HotModuleReplacementPlugin(),
