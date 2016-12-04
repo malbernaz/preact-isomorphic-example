@@ -1,50 +1,15 @@
 import { resolve } from 'path'
-import { writeFileSync } from 'fs'
 import webpack, { HotModuleReplacementPlugin, NamedModulesPlugin } from 'webpack'
 
+import { StatsWriterPlugin as StatsPlugin } from 'webpack-stats-plugin'
 import StyleLintPlugin from 'stylelint-webpack-plugin'
-import SwPrecachePlugin from 'sw-precache-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
+
+import transform from './stats-transform'
 
 const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
 
-class AssetsPlugin {
-  constructor () {
-    this.firstCompilation = true
-  }
-
-  apply (compiler) {
-    compiler.plugin('done', stats => {
-      if (this.firstCompilation) {
-        const hash = stats.hash
-        const rawAssets = stats.toJson().assetsByChunkName
-        const scripts = {}
-
-        Object.keys(rawAssets)
-          .filter(a => /\.js/.test(rawAssets[a]))
-          .forEach(a => {
-            scripts[a] = { js: rawAssets[a] }
-          })
-
-        const flatAssets = Object.keys(rawAssets)
-          .map(a => `/${ rawAssets[a].split('?')[0] }`)
-
-        writeFileSync(
-          resolve(__dirname, 'dist', 'public', 'staticAssets.js'),
-          `self.staticAssets = ${ JSON.stringify({ hash, assets: flatAssets }) }`
-        )
-
-        writeFileSync(
-          resolve(__dirname, 'dist', 'assets.js'),
-          `module.exports = ${ JSON.stringify(scripts) }`
-        )
-
-        this.firstCompilation = false
-      }
-    })
-  }
-}
-
-export default ({ DEV, baseConfig }) => ({
+export default ({ DEV, baseConfig, babelLoader }) => ({
   ...baseConfig,
   entry: {
     ...baseConfig.entry,
@@ -67,9 +32,25 @@ export default ({ DEV, baseConfig }) => ({
     chunkFilename: DEV ? '[name].[id].js?[hash]' : '[name].[id].[hash].js',
     publicPath: '/'
   },
+  module: {
+    rules: [
+      ...baseConfig.module.rules, {
+        test: /service-worker\.js$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'worker-loader',
+          options: { service: true }
+        }, babelLoader]
+      }
+    ]
+  },
   plugins: [
     ...baseConfig.plugins,
-    new AssetsPlugin(),
+    new StatsPlugin({
+      filename: 'assets.js',
+      fields: ['assets', 'assetsByChunkName', 'hash'],
+      transform
+    }),
     new CommonsChunkPlugin({
       name: 'commons',
       minChunks: Infinity
@@ -79,11 +60,11 @@ export default ({ DEV, baseConfig }) => ({
       files: '**/*.s?(c)ss',
       failOnError: !DEV
     }),
-    new SwPrecachePlugin({
-      cacheId: 'sw-precache',
-      importScripts: ['/runtime-sw.js'],
-      verbose: DEV
-    })
+    new CopyPlugin([{
+      context: resolve(__dirname, '..', 'static'),
+      from: '**/*',
+      to: resolve(__dirname, '..', 'dist', 'public')
+    }])
   ].concat(DEV ? [
     new HotModuleReplacementPlugin(),
     new NamedModulesPlugin()

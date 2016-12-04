@@ -4,7 +4,10 @@ import { resolve } from 'universal-router' // eslint-disable-line import/extensi
 import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
 import Provider from './lib/ContextProvider'
+import registerServiceWorker from './sw-register'
 import UseScroll from './lib/middleware/useScroll'
+
+registerServiceWorker()
 
 let CURRENT_LOCATION = history.location
 let FIRST_RENDER = true

@@ -2,8 +2,6 @@ import { h } from 'preact'
 
 import config from '../config'
 
-const serviceWorkerRegistration = 'if(\'serviceWorker\' in navigator){navigator.serviceWorker.register(\'/service-worker.js\',{scope:\'/\'})}'
-
 export default ({ chunks, commonjs, component, routeChunk, script, style, title }) => (
   <html lang={ config.lang }>
     <head>
@@ -35,8 +33,6 @@ export default ({ chunks, commonjs, component, routeChunk, script, style, title 
     </head>
     <body>
       <main dangerouslySetInnerHTML={{ __html: component }} />
-
-      <script dangerouslySetInnerHTML={{ __html: serviceWorkerRegistration }} />
 
       <script src={ commonjs } defer />
       <script src={ script } defer />
