@@ -1,10 +1,48 @@
 import { resolve } from 'path'
+import { writeFileSync } from 'fs'
 import webpack, { HotModuleReplacementPlugin, NamedModulesPlugin } from 'webpack'
-import AssetsPlugin from 'assets-webpack-plugin'
+
 import StyleLintPlugin from 'stylelint-webpack-plugin'
 import SwPrecachePlugin from 'sw-precache-webpack-plugin'
 
 const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
+
+class AssetsPlugin {
+  constructor () {
+    this.firstCompilation = true
+  }
+
+  apply (compiler) {
+    compiler.plugin('done', stats => {
+      if (this.firstCompilation) {
+        const hash = stats.hash
+        const rawAssets = stats.toJson().assetsByChunkName
+        const scripts = {}
+
+        Object.keys(rawAssets)
+          .filter(a => /\.js/.test(rawAssets[a]))
+          .forEach(a => {
+            scripts[a] = { js: rawAssets[a] }
+          })
+
+        const flatAssets = Object.keys(rawAssets)
+          .map(a => `/${ rawAssets[a].split('?')[0] }`)
+
+        writeFileSync(
+          resolve(__dirname, 'dist', 'public', 'staticAssets.js'),
+          `self.staticAssets = ${ JSON.stringify({ hash, assets: flatAssets }) }`
+        )
+
+        writeFileSync(
+          resolve(__dirname, 'dist', 'assets.js'),
+          `module.exports = ${ JSON.stringify(scripts) }`
+        )
+
+        this.firstCompilation = false
+      }
+    })
+  }
+}
 
 export default ({ DEV, baseConfig }) => ({
   ...baseConfig,
@@ -31,11 +69,7 @@ export default ({ DEV, baseConfig }) => ({
   },
   plugins: [
     ...baseConfig.plugins,
-    new AssetsPlugin({
-      path: resolve(__dirname, 'dist'),
-      filename: 'assets.js',
-      processOutput: x => `module.exports = ${ JSON.stringify(x) }`
-    }),
+    new AssetsPlugin(),
     new CommonsChunkPlugin({
       name: 'commons',
       minChunks: Infinity
