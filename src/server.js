@@ -7,7 +7,6 @@ import compression from 'compression'
 import express from 'express'
 import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
-import serveStatic from 'serve-static'
 
 import { manifest } from './config'
 import assets from './assets' // eslint-disable-line import/extensions
@@ -15,13 +14,13 @@ import Html from './components/Html'
 import Provider from './lib/ContextProvider'
 import router from './routes'
 
-writeFileSync(resolve(__dirname, 'public', 'manifest.json'), JSON.stringify(manifest), 'UTF-8')
+writeFileSync(resolve(__dirname, 'public', 'manifest.json'), JSON.stringify(manifest))
 
 const app = express()
 const port = 3000
 
 app.use(compression({ threshold: 0 }))
-app.use(serveStatic(resolve(__dirname, 'public')))
+app.use(express.static(resolve(__dirname, 'public')))
 app.use(serveFavicon(resolve(__dirname, 'public', 'favicon.ico')))
 
 app.get('*', async (req, res, next) => {

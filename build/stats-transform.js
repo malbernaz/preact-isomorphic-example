@@ -34,7 +34,5 @@ export default function transform ({ assets, assetsByChunkName, hash }, { compil
     .map(a => `${ publicPath }${ a.split('?')[0] }`)
     .filter(a => !/worker/.test(a))
 
-  const swAssetsMap = `self.staticAssets = ${ JSON.stringify({ hash, assets: assetsMap }) }`
-
-  return swAssetsMap
+  return `self.staticAssets = ${ JSON.stringify({ hash, assets: assetsMap }) }`
 }
