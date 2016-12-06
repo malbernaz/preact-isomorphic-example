@@ -1,10 +1,11 @@
 import { h, Component } from 'preact'
+import hoistStatics from 'hoist-non-react-statics'
 
 export default function withStyles (...styles) {
   return function wrapWithStyles (WrappedComponent) {
     const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
 
-    return class extends Component {
+    class WithStyles extends Component {
       static displayName = `WithStyles(${ displayName })`
 
       componentWillMount () {
@@ -19,5 +20,7 @@ export default function withStyles (...styles) {
         return <WrappedComponent { ...this.props } />
       }
     }
+
+    return hoistStatics(WithStyles, WrappedComponent)
   }
 }

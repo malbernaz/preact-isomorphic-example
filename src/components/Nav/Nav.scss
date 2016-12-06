@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .root {
   position: fixed;
   top: 0;
@@ -7,13 +9,20 @@
   align-items: center;
   justify-content: center;
   height: 60px;
-  background: #fefefe;
+  background: $primaryColor;
   z-index: 1;
 }
 
 .link {
   height: 60px;
   line-height: 60px;
-  padding: 20px;
+  padding: 0 20px;
+  color: $secondaryColor;
   display: block;
+  text-decoration: none;
+  transition: background-color .2s ease;
+}
+
+.link:hover {
+  background: $lightPrimaryColor;
 }

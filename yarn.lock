@@ -2762,7 +2762,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.2.0:
+hoist-non-react-statics, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -4692,11 +4692,23 @@ postcss@^5.0.0, postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.
     source-map "^0.5.6"
     supports-color "^3.1.2"
 
-preact-render-to-string@3.3.0:
+preact-compat:
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.9.3.tgz#d7c3764cdd001649a6616fa32b1d253ff3739fb1"
+  dependencies:
+    preact-render-to-string "^3.2.1"
+    preact-transition-group "^1.1.0"
+    proptypes "^0.14.3"
+
+preact-render-to-string@^3.2.1, preact-render-to-string@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-3.3.0.tgz#e7cf3815fe590d8ddc21e57c996f5c5657ca57d5"
   dependencies:
     pretty-format "^3.5.1"
+
+preact-transition-group@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/preact-transition-group/-/preact-transition-group-1.1.0.tgz#97d0beff0790d721faecd2560c02cd30d5426f23"
 
 preact@7.1.0:
   version "7.1.0"
@@ -4737,6 +4749,10 @@ progress@^1.1.8:
 promise.pipe@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/promise.pipe/-/promise.pipe-3.0.0.tgz#b8f729867f54353996e6d8e86f3bbd56882e32a6"
+
+proptypes@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/proptypes/-/proptypes-0.14.3.tgz#948d47f0ef1b501e34d934e42b39d60d26a8bf9d"
 
 proxy-addr@~1.1.2:
   version "1.1.2"

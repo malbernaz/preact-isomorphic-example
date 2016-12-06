@@ -3,7 +3,11 @@ import { writeFileSync, mkdir } from 'fs'
 
 export default function transform ({ assets, assetsByChunkName, hash }, { compiler }) {
   const formatedAssets = Object.keys(assetsByChunkName).reduce((obj, key) => {
-    const ext = assetsByChunkName[key]
+    const asset = assetsByChunkName[key] instanceof Array ?
+      assetsByChunkName[key][0] :
+      assetsByChunkName[key]
+
+    const ext = asset
       .match(/\.\w{2,3}/)[0]
       .replace(/\./, '') // eslint-disable-line no-useless-escape
 

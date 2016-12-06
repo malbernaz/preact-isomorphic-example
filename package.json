@@ -63,8 +63,10 @@
     "compression": "^1.6.2",
     "express": "^4.14.0",
     "history": "4.4.1",
+    "hoist-non-react-statics": "^1.2.0",
     "normalize.css": "^5.0.0",
     "preact": "7.1.0",
+    "preact-compat": "^3.9.3",
     "preact-render-to-string": "3.3.0",
     "serve-favicon": "^2.3.0",
     "universal-router": "^2.0.0"

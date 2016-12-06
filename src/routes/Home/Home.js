@@ -1,9 +1,24 @@
-import { h } from 'preact'
+import { h, Component } from 'preact'
 
 import withStyles from '../../lib/withStyles'
 
+import Wrapper from '../../components/Wrapper'
+
 import s from './Home.scss'
 
-const Home = () => <h1 class={ s.root }>home</h1>
+@withStyles(s)
+export default class Home extends Component {
+  static getInitialProps () {
+    return { hello: 'mom' }
+  }
 
-export default withStyles(s)(Home)
+  render ({ hello }) {
+    return (
+      <Wrapper>
+        <h1 class={ s.root }>
+          Say hello to my { hello }!
+        </h1>
+      </Wrapper>
+    )
+  }
+}

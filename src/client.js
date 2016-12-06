@@ -7,7 +7,9 @@ import Provider from './lib/ContextProvider'
 import registerServiceWorker from './sw-register'
 import UseScroll from './lib/middleware/useScroll'
 
-registerServiceWorker()
+if (process.env.NODE_ENV === 'production') {
+  registerServiceWorker()
+}
 
 let CURRENT_LOCATION = history.location
 let FIRST_RENDER = true
