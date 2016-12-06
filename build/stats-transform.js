@@ -8,10 +8,10 @@ export default function transform ({ assets, assetsByChunkName, hash }, { compil
       assetsByChunkName[key]
 
     const ext = asset
-      .match(/\.\w{2,3}/)[0]
-      .replace(/\./, '') // eslint-disable-line no-useless-escape
+      .match(/\.\w{2,4}/)[0]
+      .replace(/\./, '')
 
-    return { ...obj, [key]: { [ext]: assetsByChunkName[key] } }
+    return { ...obj, [key]: { [ext]: asset } }
   }, {})
 
   const distDir = resolve(__dirname, '..', 'dist')
@@ -35,8 +35,8 @@ export default function transform ({ assets, assetsByChunkName, hash }, { compil
   // Assets Map File for Service Worker
   const assetsMap = assets
     .map(a => a.name)
-    .map(a => `${ publicPath }${ a.split('?')[0] }`)
     .filter(a => !/worker/.test(a))
+    .map(a => `${ publicPath }${ a.split('?')[0] }`)
 
   return `self.staticAssets = ${ JSON.stringify({ hash, assets: assetsMap }) }`
 }

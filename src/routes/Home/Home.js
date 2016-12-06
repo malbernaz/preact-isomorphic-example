@@ -9,7 +9,7 @@ import s from './Home.scss'
 @withStyles(s)
 export default class Home extends Component {
   static getInitialProps () {
-    return { hello: 'mom' }
+    return { hello: 'little fella' }
   }
 
   render ({ hello }) {
