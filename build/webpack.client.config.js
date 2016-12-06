@@ -7,9 +7,9 @@ import CopyPlugin from 'copy-webpack-plugin'
 
 import transform from './stats-transform'
 
-const { optimize: { CommonsChunkPlugin, UglifyJsPlugin } } = webpack
+const { optimize: { CommonsChunkPlugin } } = webpack
 
-export default ({ DEV, baseConfig, babelLoader }) => ({
+export default ({ DEV, baseConfig }) => ({
   ...baseConfig,
   entry: {
     ...baseConfig.entry,
@@ -39,8 +39,22 @@ export default ({ DEV, baseConfig, babelLoader }) => ({
         exclude: /node_modules/,
         use: [{
           loader: 'worker-loader',
-          options: { service: true }
-        }, babelLoader]
+          options: {
+            service: true,
+            name: DEV ? 'service-worker.js?[hash]' : 'service-worker.[hash].js'
+          }
+        }, {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['es2015', { loose: true, modules: false }]
+            ],
+            plugins: [
+              'async-to-promises',
+              'transform-object-rest-spread'
+            ]
+          }
+        }]
       }
     ]
   },
@@ -68,22 +82,7 @@ export default ({ DEV, baseConfig, babelLoader }) => ({
   ].concat(DEV ? [
     new HotModuleReplacementPlugin(),
     new NamedModulesPlugin()
-  ] : [
-    new UglifyJsPlugin({
-      compress: {
-        screw_ie8: true,
-        warnings: false
-      },
-      output: {
-        comments: false,
-        screw_ie8: true
-      },
-      mangle: {
-        screw_ie8: true
-      },
-      sourceMap: true
-    })
-  ]),
+  ] : []),
   devServer: {
     port: 3001,
     host: '0.0.0.0',

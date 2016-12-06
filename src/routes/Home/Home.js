@@ -8,7 +8,7 @@ import s from './Home.scss'
 
 @withStyles(s)
 export default class Home extends Component {
-  static getInitialProps () {
+  static async getInitialProps () {
     return { hello: 'little fella' }
   }
 

@@ -1,8 +1,10 @@
 import path from 'path'
-import { DefinePlugin, LoaderOptionsPlugin } from 'webpack'
+import webpack, { DefinePlugin, LoaderOptionsPlugin } from 'webpack'
 
 import clientConfig from './webpack.client.config'
 import serverConfig from './webpack.server.config'
+
+const { optimize: { UglifyJsPlugin } } = webpack
 
 const resolve = p => path.resolve(__dirname, '..', p)
 
@@ -29,7 +31,7 @@ export default env => {
   const baseConfig = {
     context: resolve('src'),
     entry: {
-      main: CLIENT ? './client.js' : './server.js'
+      main: CLIENT ? './client.js' : ['isomorphic-fetch', './server.js']
     },
     output: {
       path: resolve(CLIENT ? 'dist/public' : 'dist')
@@ -105,11 +107,26 @@ export default env => {
         _CLIENT_: CLIENT,
         'process.env.NODE_ENV': JSON.stringify(DEV ? 'development' : 'production')
       })
-    ],
+    ].concat(!DEV ? [
+      new UglifyJsPlugin({
+        compress: {
+          screw_ie8: true,
+          warnings: false
+        },
+        output: {
+          comments: false,
+          screw_ie8: true
+        },
+        mangle: {
+          screw_ie8: true
+        },
+        sourceMap: true
+      })
+    ] : []),
     stats: { colors: true }
   }
 
   return CLIENT ?
-    clientConfig({ DEV, baseConfig, babelLoader }) :
+    clientConfig({ DEV, baseConfig }) :
     serverConfig({ DEV, baseConfig })
 }

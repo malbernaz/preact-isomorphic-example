@@ -23,6 +23,10 @@ app.use(compression({ threshold: 0 }))
 app.use(express.static(resolve(__dirname, 'public')))
 app.use(serveFavicon(resolve(__dirname, 'public', 'favicon.ico')))
 
+const chunksToPreload = Object.keys(assets)
+  .filter(c => !!assets[c].js && !/main/.test(c) && !/commons/.test(c))
+  .map(c => assets[c].js)
+
 app.get('*', async (req, res, next) => {
   try {
     const css = []
@@ -37,15 +41,7 @@ app.get('*', async (req, res, next) => {
       </Provider>
     )
 
-    const chunks = Object.keys(assets)
-      .filter(k =>
-        !!assets[k].js &&
-        !/main/.test(k) &&
-        !/commons/.test(k) &&
-        !/admin/.test(k) &&
-        !new RegExp(route.chunk).test(k)
-      )
-      .map(k => assets[k].js)
+    const chunks = chunksToPreload.filter(c => !new RegExp(route.chunk).test(c))
 
     const data = {
       chunks,

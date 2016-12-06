@@ -1,15 +1,11 @@
 import { h, render } from 'preact'
-import { resolve } from 'universal-router' // eslint-disable-line import/extensions
+import { resolve as match } from 'universal-router' // eslint-disable-line import/extensions
 
 import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
 import Provider from './lib/ContextProvider'
 import registerServiceWorker from './sw-register'
 import UseScroll from './lib/middleware/useScroll'
-
-if (process.env.NODE_ENV === 'production') {
-  registerServiceWorker()
-}
 
 let CURRENT_LOCATION = history.location
 let FIRST_RENDER = true
@@ -27,6 +23,24 @@ const routerMiddleware = {
   }
 }
 
+async function onFirstRender () {
+  if (process.env.NODE_ENV === 'production') {
+    await registerServiceWorker()
+  }
+
+  if (!self.fetch) {
+    await require.ensure([], require =>
+      require('isomorphic-fetch'), 'fetch-polyfill'
+    )
+  }
+
+  const node = document.getElementById('css')
+
+  if (node) node.parentNode.removeChild(node)
+
+  FIRST_RENDER = false
+}
+
 const context = {
   insertCss (...styles) {
     const removeCss = styles.map(x => x._insertCss())
@@ -38,19 +52,13 @@ const context = {
 const mnt = document.querySelector('main')
 
 async function bootstrap (location) {
-  if (FIRST_RENDER) {
-    const node = document.getElementById('css')
-
-    if (node) node.parentNode.removeChild(node)
-
-    FIRST_RENDER = false
-  }
+  if (FIRST_RENDER) await onFirstRender()
 
   CURRENT_LOCATION = location
 
   const router = require('./routes').default // eslint-disable-line global-require
 
-  const route = await resolve(router, { path: location.pathname, ...routerMiddleware })
+  const route = await match(router, { path: location.pathname, ...routerMiddleware })
 
   const component = (
     <Provider context={ context }>
