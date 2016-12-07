@@ -1,7 +1,12 @@
 @import '~normalize.css';
 @import '../../styles/variables.scss';
 
+body {
+  font-weight: 200;
+  font-size: .9rem;
+  color: $textColor;
+}
+
 .root {
-  text-align: center;
   margin: 60px auto 0;
 }

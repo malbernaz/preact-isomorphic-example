@@ -7,7 +7,7 @@ export default {
       require.ensure([], require => resolve(require('./Home').default), 'home')
     })
 
-    const props = Home.getInitialProps()
+    const props = await Home.getInitialProps()
 
     return {
       title: 'Home',

@@ -1,14 +1,14 @@
 import { resolve } from 'path'
 import { writeFileSync, mkdir } from 'fs'
 
-export default function transform ({ assets, assetsByChunkName, hash }, { compiler }) {
+export default ({ DEV }) => ({ assets, assetsByChunkName, hash }, { compiler }) => {
   const formatedAssets = Object.keys(assetsByChunkName).reduce((obj, key) => {
     const asset = assetsByChunkName[key] instanceof Array ?
       assetsByChunkName[key][0] :
       assetsByChunkName[key]
 
     const ext = asset
-      .match(/\.\w{2,4}/)[0]
+      .match(DEV ? /\.\w{2,4}/ : /\.\w{2,4}$/)[0]
       .replace(/\./, '')
 
     return { ...obj, [key]: { [ext]: asset } }

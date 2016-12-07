@@ -28,8 +28,8 @@ export default ({ DEV, baseConfig }) => ({
   },
   output: {
     ...baseConfig.output,
-    filename: DEV ? '[name].js?[hash]' : '[name].[hash].js',
-    chunkFilename: DEV ? '[name].[id].js?[hash]' : '[name].[id].[hash].js',
+    filename: DEV ? '[name].js' : '[name].[hash].js',
+    chunkFilename: DEV ? '[name].[id].js' : '[name].[id].[hash].js',
     publicPath: '/'
   },
   module: {
@@ -41,20 +41,9 @@ export default ({ DEV, baseConfig }) => ({
           loader: 'worker-loader',
           options: {
             service: true,
-            name: DEV ? 'service-worker.js?[hash]' : 'service-worker.[hash].js'
+            name: DEV ? 'service-worker.js' : 'service-worker.[hash].js'
           }
-        }, {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['es2015', { loose: true, modules: false }]
-            ],
-            plugins: [
-              'async-to-promises',
-              'transform-object-rest-spread'
-            ]
-          }
-        }]
+        }, 'babel-loader']
       }
     ]
   },
@@ -63,7 +52,7 @@ export default ({ DEV, baseConfig }) => ({
     new StatsPlugin({
       filename: 'assets.js',
       fields: ['assets', 'assetsByChunkName', 'hash'],
-      transform
+      transform: transform({ DEV })
     }),
     new CommonsChunkPlugin({
       name: 'commons',

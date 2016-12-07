@@ -23,24 +23,6 @@ const routerMiddleware = {
   }
 }
 
-async function onFirstRender () {
-  if (process.env.NODE_ENV === 'production') {
-    await registerServiceWorker()
-  }
-
-  if (!self.fetch) {
-    await require.ensure([], require =>
-      require('isomorphic-fetch'), 'fetch-polyfill'
-    )
-  }
-
-  const node = document.getElementById('css')
-
-  if (node) node.parentNode.removeChild(node)
-
-  FIRST_RENDER = false
-}
-
 const context = {
   insertCss (...styles) {
     const removeCss = styles.map(x => x._insertCss())
@@ -52,7 +34,17 @@ const context = {
 const mnt = document.querySelector('main')
 
 async function bootstrap (location) {
-  if (FIRST_RENDER) await onFirstRender()
+  if (FIRST_RENDER) {
+    if (process.env.NODE_ENV === 'production') {
+      await registerServiceWorker()
+    }
+
+    if (!self.fetch) {
+      await require.ensure([], require =>
+        require('isomorphic-fetch'), 'fetch-polyfill'
+      )
+    }
+  }
 
   CURRENT_LOCATION = location
 
@@ -67,6 +59,14 @@ async function bootstrap (location) {
   )
 
   render(component, mnt, mnt.lastElementChild)
+
+  if (FIRST_RENDER) {
+    const node = document.getElementById('css')
+
+    if (node) node.parentNode.removeChild(node)
+
+    FIRST_RENDER = false
+  }
 }
 
 history.listen(bootstrap)
