@@ -1,24 +1,6 @@
 const title = 'preact isomorphic example'
 const description = 'A very simple boilerplate for an isomorphic Preact application'
 const color = '#673ab8'
-const secondaryColor = '#f2f2f2'
-
-export const manifest = {
-  name: title,
-  icons: [{
-    src: '/android-chrome-192x192.png',
-    sizes: '192x192',
-    type: 'image/png'
-  }, {
-    src: '/android-chrome-512x512.png',
-    sizes: '512x512',
-    type: 'image/png'
-  }],
-  theme_color: color,
-  background_color: secondaryColor,
-  display: 'standalone',
-  orientation: 'portrait'
-}
 
 export default {
   lang: 'en',

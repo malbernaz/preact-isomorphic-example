@@ -30,7 +30,7 @@ const Card = ({ json }) => json.Response === 'True' ?
       </div>
     </div>
   </div> :
-  <div class={ s.root }>
+  <div class={ s.error }>
     <div class={ s.info }>
       <h2>{ json.Error }</h2>
     </div>

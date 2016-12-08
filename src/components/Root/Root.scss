@@ -1,10 +1,27 @@
 @import '~normalize.css';
 @import '../../styles/variables.scss';
 
-body {
-  font-weight: 200;
-  font-size: .9rem;
-  color: $textColor;
+html {
+  color: $text-color;
+  font-family: $text-family;
+  font-size: $text-size;
+  font-weight: $text-weight;
+}
+
+input {
+  appearance: none;
+  color: $text-color;
+  font-family: $text-family;
+  border: 0;
+  border-bottom: 1px solid rgba($primary-color, .3);
+  margin: 0 auto 1rem;
+  width: 100%;
+  text-align: center;
+  padding: .5rem 0;
+}
+
+input:focus {
+  outline: none;
 }
 
 .root {

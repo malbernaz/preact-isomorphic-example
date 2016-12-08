@@ -1,9 +1,27 @@
 // Colors
 
-$primaryColor: #673abb;
-$lightPrimaryColor: #9e7cda;
-$secondaryColor: #f2f2f2;
-$textColor: #333;
+$primary-color: #673abb;
+$light-primary-color: #9e7cda;
+$secondary-color: #f2f2f2;
+$text-color: #444;
+
+// Fonts
+
+$text-family:
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Fira Sans',
+  'Droid Sans',
+  'Helvetica Neue',
+  sans-serif;
+
+$text-size: .9rem;
+$text-weight: 200;
 
 // Media Queries
 

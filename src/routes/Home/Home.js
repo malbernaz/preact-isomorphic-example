@@ -10,25 +10,33 @@ import s from './Home.scss'
 @withStyles(s)
 export default class Home extends Component {
   static async getInitialProps () {
-    return fetch('http://www.omdbapi.com/?i=tt0086250&plot=short&r=json')
-      .then(response => response.json())
-      .then(json => ({ json }))
+    const response = await fetch('http://www.omdbapi.com/?t=the%20big%20lebowski&plot=short&r=json')
+
+    const json = await response.json()
+
+    return { json }
   }
 
-  state = { title: 'scarface', json: this.props.json }
+  state = {
+    title: '',
+    json: this.props.json,
+    loading: false
+  }
 
   fetchMovie = event => {
     const { value } = event.target
 
-    this.setState({ title: value })
+    this.setState({ title: value, loading: true })
 
     if (this.searchtimeout) clearTimeout(this.searchtimeout)
 
-    this.searchtimeout = setTimeout(() =>
-      fetch(`http://www.omdbapi.com/?t=${ value }&plot=short&r=json`)
-        .then(response => response.json())
-        .then(json => this.setState({ json }))
-    , 1000)
+    this.searchtimeout = setTimeout(async () => {
+      const response = await fetch(`http://www.omdbapi.com/?t=${ value }&plot=short&r=json`)
+
+      const json = await response.json()
+
+      this.setState({ json, loading: false })
+    }, 1000)
   }
 
   render (props, { title, json }) {
@@ -41,7 +49,7 @@ export default class Home extends Component {
           value={ title }
           onInput={ this.fetchMovie }
         />
-        <Card json={ json } />
+        { !this.state.loading ? <Card json={ json } /> : 'loading...' }
       </Wrapper>
     )
   }

@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   height: 60px;
-  background: $primaryColor;
+  background: $primary-color;
   z-index: 1;
   box-shadow: 0 .1rem .5rem rgba(black, .3);
 }
@@ -18,12 +18,12 @@
   height: 60px;
   line-height: 60px;
   padding: 0 20px;
-  color: $secondaryColor;
+  color: $secondary-color;
   display: block;
   text-decoration: none;
   transition: background-color .2s ease;
 }
 
 .link:hover {
-  background: $lightPrimaryColor;
+  background: $light-primary-color;
 }

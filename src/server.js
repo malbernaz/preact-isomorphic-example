@@ -2,19 +2,15 @@ import { createServer } from 'http'
 import { h } from 'preact'
 import { resolve } from 'path'
 import { resolve as match } from 'universal-router' // eslint-disable-line import/extensions
-import { writeFileSync } from 'fs'
 import compression from 'compression'
 import express from 'express'
 import render from 'preact-render-to-string'
 import serveFavicon from 'serve-favicon'
 
-import { manifest } from './config'
 import assets from './assets' // eslint-disable-line import/extensions
 import Html from './components/Html'
 import Provider from './lib/ContextProvider'
 import router from './routes'
-
-writeFileSync(resolve(__dirname, 'public', 'manifest.json'), JSON.stringify(manifest))
 
 const app = express()
 const port = 3000
@@ -33,7 +29,9 @@ app.get('*', async (req, res, next) => {
 
     const context = { insertCss: (...s) => s.forEach(style => css.push(style._getCss())) }
 
-    const route = await match(router, { path: req.url })
+    const { _parsedUrl: { pathname }, query } = req
+
+    const route = await match(router, { path: pathname, query })
 
     const component = render(
       <Provider context={ context }>

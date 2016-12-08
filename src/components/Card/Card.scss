@@ -13,7 +13,7 @@
 
 .cardSection h2 {
   font-weight: 200;
-  color: $primaryColor;
+  color: $primary-color;
   text-transform: capitalize;
 }
 
@@ -26,7 +26,7 @@
   display: block;
   width: 100%;
   height: 1px;
-  background: $primaryColor;
+  background: $primary-color;
   opacity: .3;
 }
 
@@ -50,7 +50,16 @@
 
 .info {
   margin: 1rem;
-  // flex-grow: 1;
+  width: calc(100% - 300px);
+}
+
+.error {
+  composes: root;
+  justify-content: center;
+}
+
+.error h2 {
+  color: tomato;
 }
 
 .actors li {
