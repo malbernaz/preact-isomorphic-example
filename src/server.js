@@ -20,7 +20,7 @@ app.use(express.static(resolve(__dirname, 'public')))
 app.use(serveFavicon(resolve(__dirname, 'public', 'favicon.ico')))
 
 const chunksToPreload = Object.keys(assets)
-  .filter(c => !!assets[c].js && !/main/.test(c) && !/commons/.test(c))
+  .filter(c => !!assets[c].js && !/(main|commons)/.test(c))
   .map(c => assets[c].js)
 
 app.get('*', async (req, res, next) => {
@@ -31,7 +31,7 @@ app.get('*', async (req, res, next) => {
 
     const { _parsedUrl: { pathname }, query } = req
 
-    const route = await match(router, { path: pathname, query })
+    const route = await match(router, { path: pathname, currentRoute: pathname, query })
 
     const component = render(
       <Provider context={ context }>

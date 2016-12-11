@@ -50,7 +50,9 @@ async function bootstrap (location) {
 
   const router = require('./routes').default // eslint-disable-line global-require
 
-  const route = await match(router, { path: location.pathname, ...routerMiddleware })
+  const { pathname } = location
+
+  const route = await match(router, { path: pathname, currentRoute: pathname, ...routerMiddleware })
 
   const component = (
     <Provider context={ context }>

@@ -5,11 +5,17 @@ import withStyles from '../../lib/withStyles'
 
 import s from './Nav.scss'
 
-const Nav = () => (
+const NavLink = props => (
+  <Link class={ props.currentRoute === props.to ? s.linkActive : s.link } { ...props }>
+    { props.children }
+  </Link>
+)
+
+const Nav = ({ currentRoute }) => (
   <header class={ s.root }>
-    <Link class={ s.link } to="/">home</Link>
-    <Link class={ s.link } to="/about">about</Link>
-    <Link class={ s.link } to="/contact">contact</Link>
+    <NavLink currentRoute={ currentRoute } to="/">home</NavLink>
+    <NavLink currentRoute={ currentRoute } to="/about">about</NavLink>
+    <NavLink currentRoute={ currentRoute } to="/contact">contact</NavLink>
   </header>
 )
 

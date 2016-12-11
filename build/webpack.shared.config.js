@@ -39,7 +39,8 @@ export default env => {
     resolve: {
       alias: {
         react: 'preact-compat',
-        'react-dom': 'preact-compat'
+        'react-dom': 'preact-compat',
+        preact: 'preact/dist/preact.min.js'
       },
       mainFields: ['jsnext:main', 'main']
     },

@@ -9,14 +9,14 @@ import NotFound from './NotFound'
 export default {
   path: '/',
 
-  async action ({ next, preMiddleware, postMiddleware }) {
+  async action ({ next, preMiddleware, postMiddleware, currentRoute }) {
     if (preMiddleware) preMiddleware()
 
     const route = await next()
 
     if (postMiddleware) postMiddleware(route)
 
-    const component = <Root>{ route.component }</Root>
+    const component = <Root currentRoute={ currentRoute }>{ route.component }</Root>
 
     return { ...route, component }
   },

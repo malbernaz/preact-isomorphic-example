@@ -2,7 +2,6 @@ import { resolve } from 'path'
 import webpack, { HotModuleReplacementPlugin, NamedModulesPlugin } from 'webpack'
 
 import { StatsWriterPlugin as StatsPlugin } from 'webpack-stats-plugin'
-import StyleLintPlugin from 'stylelint-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 
 import transform from './stats-transform'
@@ -20,10 +19,7 @@ export default ({ DEV, baseConfig }) => ({
     ]
   },
   resolve: {
-    alias: {
-      preact: 'preact/dist/preact.min.js',
-      ...baseConfig.resolve.alias
-    },
+    ...baseConfig.resolve,
     mainFields: ['jsnext:browser', 'jsnext:main', 'browser', 'main']
   },
   output: {
@@ -58,11 +54,6 @@ export default ({ DEV, baseConfig }) => ({
       name: 'commons',
       minChunks: Infinity
     }),
-    new StyleLintPlugin({
-      configFile: '.stylelintrc.json',
-      files: '**/*.s?(c)ss',
-      failOnError: !DEV
-    }),
     new CopyPlugin([{
       context: resolve(__dirname, '..', 'static'),
       from: '**/*',
@@ -79,10 +70,6 @@ export default ({ DEV, baseConfig }) => ({
     clientLogLevel: 'error',
     hot: true,
     inline: true,
-    proxy: {
-      '*': {
-        target: 'http://0.0.0.0:3000'
-      }
-    }
+    proxy: { '*': { target: 'http://0.0.0.0:3000' } }
   }
 })
