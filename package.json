@@ -61,7 +61,7 @@
     "history": "^4.6.1",
     "hoist-non-react-statics": "^1.2.0",
     "isomorphic-fetch": "^2.2.1",
-    "normalize.css": "^5.0.0",
+    "normalize.css": "^7.0.0",
     "preact": "7.1.0",
     "preact-compat": "3.9.4",
     "preact-render-to-string": "3.3.0",
