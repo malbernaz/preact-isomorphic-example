@@ -19,7 +19,7 @@ export default ({ chunks, commonjs, component, routeChunk, script, style, title 
         <meta property={ m.property } content={ m.content } />
       ) }
 
-      { config.head.link.map(l =>
+      { config.head.link.map(l => (
         <link
           color={ l.color }
           href={ l.href }
@@ -27,7 +27,7 @@ export default ({ chunks, commonjs, component, routeChunk, script, style, title 
           sizes={ l.sizes }
           type={ l.type }
         />
-      ) }
+      )) }
 
       <style id="css">{ style }</style>
     </head>
