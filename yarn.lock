@@ -2293,12 +2293,6 @@ file-loader@^0.11.2:
   dependencies:
     loader-utils "^1.0.2"
 
-file-loader@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.9.0.tgz#1d2daddd424ce6d1b07cfe3f79731bed3617ab42"
-  dependencies:
-    loader-utils "~0.2.5"
-
 file-type@^3.1.0, file-type@^3.8.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-3.9.0.tgz#257a078384d1db8087bc449d107d52a52672b9e9"
@@ -2920,18 +2914,18 @@ ignore@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.0.tgz#8d88f03c3002a0ac52114db25d2c673b0bf1e435"
 
-image-webpack-loader@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/image-webpack-loader/-/image-webpack-loader-3.1.0.tgz#472edec9b45393b74140c8b4341ef9917f905bbb"
+image-webpack-loader@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/image-webpack-loader/-/image-webpack-loader-3.3.1.tgz#d2d72be024f8975e48c984f2401c0c484897cbd3"
   dependencies:
-    file-loader "^0.9.0"
     imagemin "^5.2.2"
     imagemin-gifsicle "^5.1.0"
     imagemin-mozjpeg "^6.0.0"
     imagemin-optipng "^5.2.1"
     imagemin-pngquant "^5.0.0"
-    imagemin-svgo "^5.2.0"
-    loader-utils "^0.2.16"
+    imagemin-svgo "^5.2.1"
+    loader-utils "^1.1.0"
+    object-assign "^4.1.1"
 
 imagemin-gifsicle@^5.1.0:
   version "5.1.0"
@@ -2965,9 +2959,9 @@ imagemin-pngquant@^5.0.0:
     is-png "^1.0.0"
     pngquant-bin "^3.0.0"
 
-imagemin-svgo@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/imagemin-svgo/-/imagemin-svgo-5.2.0.tgz#5130614ac18cb7b2b1ca005386681c51ceb2bb34"
+imagemin-svgo@^5.2.1:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/imagemin-svgo/-/imagemin-svgo-5.2.2.tgz#501699f5789730a57922b8736ea15c53f7b55838"
   dependencies:
     is-svg "^2.0.0"
     svgo "^0.7.0"
@@ -3540,7 +3534,7 @@ loader-runner@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.0.tgz#f482aea82d543e07921700d5a46ef26fdac6b8a2"
 
-loader-utils@0.2.x, loader-utils@^0.2.15, loader-utils@^0.2.16, loader-utils@~0.2.5:
+loader-utils@0.2.x, loader-utils@^0.2.15, loader-utils@^0.2.16:
   version "0.2.16"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.16.tgz#f08632066ed8282835dff88dfb52704765adee6d"
   dependencies:
