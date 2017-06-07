@@ -1,5 +1,5 @@
 import { h, render } from 'preact'
-import { resolve as match } from 'universal-router' // eslint-disable-line import/extensions
+import Router from 'universal-router' // eslint-disable-line import/extensions
 
 import { updateTitle } from './lib/updateTag'
 import history from './lib/history'
@@ -48,11 +48,16 @@ async function bootstrap (location) {
 
   CURRENT_LOCATION = location
 
-  const router = require('./routes').default // eslint-disable-line global-require
+  const routes = require('./routes').default // eslint-disable-line global-require
+  const router = new Router(routes)
 
   const { pathname } = location
 
-  const route = await match(router, { path: pathname, currentRoute: pathname, ...routerMiddleware })
+  const route = await router.resolve({
+    path: pathname,
+    currentRoute: pathname,
+    ...routerMiddleware
+  })
 
   const component = (
     <Provider context={ context }>

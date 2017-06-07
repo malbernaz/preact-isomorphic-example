@@ -1,7 +1,7 @@
 import { createServer } from 'http'
 import { h } from 'preact'
 import { resolve } from 'path'
-import { resolve as match } from 'universal-router' // eslint-disable-line import/extensions
+import Router from 'universal-router' // eslint-disable-line import/extensions
 import compression from 'compression'
 import express from 'express'
 import render from 'preact-render-to-string'
@@ -10,10 +10,11 @@ import serveFavicon from 'serve-favicon'
 import assets from './assets' // eslint-disable-line import/extensions
 import Html from './components/Html'
 import Provider from './lib/ContextProvider'
-import router from './routes'
+import routes from './routes'
 
 const app = express()
 const port = 3000
+const router = new Router(routes)
 
 app.use(compression({ threshold: 0 }))
 app.use(express.static(resolve(__dirname, 'public')))
@@ -31,7 +32,7 @@ app.get('*', async (req, res, next) => {
 
     const { _parsedUrl: { pathname }, query } = req
 
-    const route = await match(router, { path: pathname, currentRoute: pathname, query })
+    const route = await router.resolve({ path: pathname, currentRoute: pathname, query })
 
     const component = render(
       <Provider context={ context }>

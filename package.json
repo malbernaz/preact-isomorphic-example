@@ -66,6 +66,6 @@
     "preact-compat": "^3.16.0",
     "preact-render-to-string": "^3.6.3",
     "serve-favicon": "^2.3.0",
-    "universal-router": "^2.0.0"
+    "universal-router": "^3.2.0"
   }
 }
